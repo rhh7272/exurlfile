@@ -51,11 +51,16 @@ def load_url(url):
                     language=["ko", "en", "en-US", "ja", "zh", "es", "fr", "de"]
                 )
                 docs = loader.load()
-            except Exception:
+            except Exception as e2:
+                st.error(f"유튜브 자막 추출 실패 원인: {e2}")
                 docs = []
     else:
         try:
-            loader = WebBaseLoader(url)
+            # 일반 웹페이지에서 봇 차단을 우회하기 위해 User-Agent 헤더 추가
+            loader = WebBaseLoader(
+                url,
+                header_template={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"}
+            )
             docs = loader.load()
         except Exception as e:
             st.error(f"웹페이지를 불러오는 중 오류가 발생했습니다: {e}")
